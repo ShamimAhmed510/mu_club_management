@@ -1,34 +1,32 @@
 {
   "version": 2,
-  "public": true,
-  "buildCommand": "pnpm run build",
-  "outputDirectory": "dist/public",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "framework": null,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "https://YOUR-API-BACKEND-URL/api/:path*"
+      "src": "index.ts", 
+      "use": "@vercel/node"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "artifacts/club-portal/package.json",
+      "use": "@vercel/static-build",
+      "config": { 
+        "distDir": "dist/public" 
+      }
     }
   ],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
+      "src": "/api/(.*)",
+      "dest": "index.ts"
     },
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "src": "/assets/(.*)",
+      "dest": "artifacts/club-portal/assets/$1",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "artifacts/club-portal/$1",
+      "continue": true
     }
   ]
 }
