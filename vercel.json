@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter @workspace/club-portal run build",
+  "public": true,
+  "buildCommand": "pnpm run build",
   "outputDirectory": "dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
